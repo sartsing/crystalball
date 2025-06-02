@@ -12,13 +12,14 @@ module Crystalball
             'execution_map_path' => 'tmp/crystalball_data.yml',
             'map_expiration_period' => 86_400,
             'repo_path' => Dir.pwd,
-            'requires' => [],
+            'requires' => ['crystalball/rspec/parallel_runner'],
             'diff_from' => 'HEAD',
             'diff_to' => nil,
             'runner_class_name' => 'Crystalball::RSpec::Runner',
             'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder',
             'log_level' => :info,
-            'log_file' => 'log/crystalball.log'
+            'log_file' => 'log/crystalball.log',
+            'parallel_enabled' => false
           }.merge(config)
         end
 
@@ -33,6 +34,10 @@ module Crystalball
 
         def [](key)
           respond_to?(key, true) ? send(key) : raw_value(key)
+        end
+
+        def []=(key, value)
+          values[key] = value
         end
 
         private
@@ -52,7 +57,7 @@ module Crystalball
         def runner_class
           @runner_class ||= begin
             run_requires
-
+            self['runner_class_name'] = 'Crystalball::RSpec::ParallelRunner' if self['parallel_enabled']
             Object.const_get(self['runner_class_name'])
           end
         end
