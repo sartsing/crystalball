@@ -13,6 +13,8 @@ module Crystalball
 
           spec_files = prediction.map { |line| line.sub(/\[.*\]$/, '') }.sort.uniq
 
+          Crystalball.log :info, "Specs predicted to run: #{spec_files.join(', ')}"
+
           if spec_files.empty?
             Crystalball.log :warn, "No specs predicted to run."
             return 0
