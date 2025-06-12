@@ -12,7 +12,8 @@ module Crystalball
             'execution_map_path' => 'tmp/crystalball_data.yml',
             'map_expiration_period' => 86_400,
             'repo_path' => Dir.pwd,
-            'requires' => ['crystalball/rspec/parallel_runner'],
+            'predicted_specs_file_path' => 'tmp/predicted_specs.txt',
+            'requires' => ['crystalball/rspec/predictor_runner'],
             'diff_from' => 'HEAD',
             'diff_to' => nil,
             'runner_class_name' => 'Crystalball::RSpec::Runner',
@@ -57,7 +58,7 @@ module Crystalball
         def runner_class
           @runner_class ||= begin
             run_requires
-            self['runner_class_name'] = 'Crystalball::RSpec::ParallelRunner' if self['parallel_enabled']
+            self['runner_class_name'] = 'Crystalball::RSpec::PredictorRunner' if self['predictor_runner']
             Object.const_get(self['runner_class_name'])
           end
         end
