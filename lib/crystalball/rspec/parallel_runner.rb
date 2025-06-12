@@ -20,11 +20,15 @@ module Crystalball
 
           num_processes = ENV["PARALLEL_TEST_PROCESSORS"].to_i > 0 ? ENV["PARALLEL_TEST_PROCESSORS"].to_i : Parallel.processor_count
 
-          Crystalball.log :info, "Running specs in parallel using #{num_processes} workers"
+          Crystalball.log :info, "Running specs in parallel using #{num_processes} workers in round robin mode."
 
-          groups = spec_files.each_slice((spec_files.size.to_f / num_processes).ceil).to_a
+          groups = Array.new(num_processes) { [] }
+          spec_files.each_with_index do |file, index|
+            groups[index % num_processes] << file
+          end
 
-          results = Parallel.map(groups, in_processes: num_processes) do |group|
+          results = Parallel.map(groups.each_with_index.to_a, in_processes: num_processes) do |(group, idx)|
+            ENV['TEST_ENV_NUMBER'] = idx == 0 ? '' : (idx + 1).to_s
             ::RSpec::Core::Runner.run(group, err, out)
           end
 
