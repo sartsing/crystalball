@@ -20,7 +20,7 @@ module Crystalball
             'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder',
             'log_level' => :info,
             'log_file' => 'log/crystalball.log',
-            'parallel_enabled' => false
+            'predictor_runner' => false
           }.merge(config)
         end
 

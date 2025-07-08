@@ -29,6 +29,20 @@ Or install it yourself as:
 
 Please see our [official documentation](https://toptal.github.io/crystalball/).
 
+### Predictor Mode: 
+
+Predictor mode gives you the ability to run Crystalball in a way that it will predict which tests will run and output the mapping in a configurable file location.
+
+To use Crystalball in predictor mode, add the following command before bundle exec:
+
+```ruby
+CRYSTALBALL_PREDICTOR_RUNNER=true
+```
+
+Default location of output file is `tmp/predicted_specs.txt` 
+
+To change this value set `CRYSTALBALL_PREDICTED_SPECS_FILE_PATH`
+
 ### Versioning
 
 We use [semantic versioning](https://semver.org/) for our [releases](https://github.com/toptal/crystalball/releases).
